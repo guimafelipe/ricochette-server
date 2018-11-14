@@ -20,6 +20,8 @@ module.exports = class Lobby{
     }
 
     createMatchWith(challangerid, existentid){
+        return
+
         if(!this.queueUsers[existentid]) return null;
         console.log('oi');
         let challangerName = this.io.sockets.connected[challangerid].name;
