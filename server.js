@@ -21,8 +21,12 @@ function socketSetup(socket){
     socket.queueState = 'free';
     socket.name = 'Douglas';
 
-    socket.on('enterQueue', (name) => {
-        lobby.addToLobby(socket.id, name);
+    socket.on('enterLobby', () => {
+        lobby.onLobbyUpdated();
+    });
+
+    socket.on('enterQueue', () => {
+        lobby.addToLobby(socket.id, socket.name);
         socket.queueState = 'onQueue';
     });
 
@@ -39,6 +43,9 @@ function socketSetup(socket){
         let match = lobby.createMatchWith(socket.id, oponentid);
         if(!match) {
             console.log('ERROR: ao criar partida entre ' + socket.id + ' e ' + oponentid + '.');
+        } else {
+            io.to(oponentid).emit('enterMatch');
+            io.to(socket.id).emit('enterMatch');
         }
     });
 
@@ -50,8 +57,6 @@ function socketSetup(socket){
         console.log("Client disconnected")
         lobby.removeFromLobby(socket.id);
     });
-
-    lobby.onLobbyUpdated();
 }
 
 io.on("connection", socket => {
