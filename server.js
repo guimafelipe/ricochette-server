@@ -44,8 +44,8 @@ function socketSetup(socket){
         if(!match) {
             console.log('ERROR: ao criar partida entre ' + socket.id + ' e ' + oponentid + '.');
         } else {
-            io.to(oponentid).emit('enterMatch');
-            io.to(socket.id).emit('enterMatch');
+            io.to(oponentid).emit('enterMatch', {isMaster: true});
+            io.to(socket.id).emit('enterMatch', {isMaster: false});
         }
     });
 
