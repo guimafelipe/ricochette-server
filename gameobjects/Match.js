@@ -19,9 +19,9 @@ module.exports = class Match {
 
     setupSocket(socketid){
         let socket = this.io.sockets.connected[socketid];
-        socket.on('setAction', data => {
-            if(data.action === 'quit') this.endMatch(socketid);
-            else this.updateNextAction(socketid, data.action);
+        socket.on('quit_game', () => this.endMatch(socketid));
+        socket.on('commit_game', data => {
+            this.sendEventToPlayers('sync_game', data);
         })
     }
 
